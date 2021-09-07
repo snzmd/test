@@ -1,0 +1,25 @@
+---
+- name: Chrony playbook
+  hosts: 192.168.35.72
+  gather_facts: false
+  remote_user: root
+  tasks:
+    
+    - name: check the chrony services
+      shell: "systemctl status chronyd.service | grep -i Active"
+      register: chrony_status
+
+    - name: register
+      debug:
+        msg: " chrony status --> {{ chrony_status.stdout_lines }} "
+    - name: disable the chronyd.service
+      service:
+        name: chronyd.service
+        state: stopped
+        enabled: false
+
+    - name: enable the ntpd.service
+      service:
+        name: ntpd.service
+        state: started
+        enabled: true
