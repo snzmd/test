@@ -1,0 +1,29 @@
+---
+- name: file utilization
+  hosts: 192.168.35.72
+  remote_user: root
+  gather_facts: false
+  tasks:
+    - name: check the filessystem utilization
+      shell: df -h "{{ item }}" | tail -n 1 | awk {'print $5 '}  | sed 's/%//g'
+      loop:
+        - /tmp
+        - /home
+        - /var
+        - /root
+      register: test
+
+    - debug:
+        msg: "{{ item.item}}  is {{item.stdout}}%"
+      loop: "{{ test.results }}"
+      loop_control:
+       label: "{{ ansible_loop_var }}"
+       
+    - name: print the filesize > 70%
+      debug:
+       msg: "The file {{ item.item }} size  > 70%, which is = {{ item.stdout }}%"
+      when: "{{ item.stdout }} > 70"
+      loop: "{{ test.results }}"
+      loop_control:
+       label: "{{ ansible_loop_var }}"
+   
