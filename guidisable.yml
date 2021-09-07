@@ -1,0 +1,20 @@
+---
+- name: GUI playbook
+  hosts: 192.168.35.72
+  remote_user: root
+  gather_facts: false
+  tasks:
+
+    - name: check the default mode
+      shell: systemctl get-default
+      register: default_status
+
+    - name: message
+      debug:
+        msg: "{{ default_status.stdout_lines }}"
+
+    - name: set the multi user mode
+      shell: systemctl set-default multi-user.target
+
+    - name: set the multi user mode without reboot
+      shell: systemctl isolate multi-user.target
