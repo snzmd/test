@@ -1,0 +1,28 @@
+---
+- name: DNS playbook
+  hosts: 192.168.35.72
+  remote_user: root
+  gather_facts: false
+  tasks:
+
+    - name: check the /etc/hosts
+      shell: "cat /etc/hosts"
+      register: hosts
+
+    - debug:
+       msg: "{{ hosts.stdout_lines}}"
+
+    - name: read the /etc/nsswitch.conf
+      shell: "cat /etc/nsswitch.conf"
+      register: nsswitch
+
+    - debug:
+        msg: "{{ nsswitch.stdout_lines }}"
+
+    - name: read the /etc/resolv.conf
+      shell: "cat /etc/resolv.conf"
+      register: resolv_conf
+
+    - debug:
+        msg: "{{ resolv_conf.stdout_lines }}"
+        
