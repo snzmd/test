@@ -1,0 +1,10 @@
+---
+- hosts: localhost
+  tasks:
+    - name: Display message
+      debug:
+        msg: "Test Text"
+        
+    - name: run command
+      shell: ls
+    
